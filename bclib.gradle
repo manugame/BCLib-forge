@@ -24,26 +24,53 @@ repositories {
     maven { url 'https://maven.terraformersmc.com' }
 }
 
+//loom {
+//    accessWidenerPath = file("src/main/resources/bclib.accesswidener")
+//}
+
 loom {
-    accessWidenerPath = file("src/main/resources/bclib.accesswidener")
+    forge {
+        mixinConfigs = [
+                "krypton.mixins.json"
+        ]
+
+        dataGen {
+            mod project.mod_id
+        }
+    }
+
+    launches {
+        data {
+            arg "--existing", file("src/main/resources").absolutePath
+        }
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    //modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    //modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    forge "net.minecraftforge:forge:${project.forge_version}"
+
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     modCompileOnly "dev.emi:emi:${emi_version}"
     //modImplementation "dev.emi:emi:${emi_version}"
 }
 
-processResources {
-    println "Version: ${project.mod_version}"
-    inputs.property "version", project.mod_version
+//processResources {
+//    println "Version: ${project.mod_version}"
+//    inputs.property "version", project.mod_version
+//
+//    filesMatching("fabric.mod.json") {
+//        expand "version": project.mod_version
+//    }
+//}
 
-    filesMatching("fabric.mod.json") {
+processResources {
+    inputs.property "version", project.mod_version
+    filesMatching("META-INF/mods.toml") {
         expand "version": project.mod_version
     }
 }
